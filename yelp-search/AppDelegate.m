@@ -18,6 +18,7 @@
     
     RestaurantsViewController *rvc = [[RestaurantsViewController alloc] init];
     UINavigationController *nc = [[UINavigationController alloc] initWithRootViewController:rvc];
+    
     self.window.rootViewController = nc;
     self.window.backgroundColor = [UIColor whiteColor];
     [self.window makeKeyAndVisible];
