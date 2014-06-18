@@ -22,6 +22,7 @@ NSString * const kYelpTokenSecret = @"YbaDOBV1GRIVnpw-ks3rD_sOhWc";
 @property (nonatomic, strong) YelpClient *client;
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
 @property (nonatomic, strong) NSArray *restaurants;
+@property (nonatomic, strong) UISearchBar *searchBar;
 
 @end
 
@@ -32,8 +33,22 @@ NSString * const kYelpTokenSecret = @"YbaDOBV1GRIVnpw-ks3rD_sOhWc";
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
     if (self) {
         // Custom initialization
+        self.searchBar = [[UISearchBar alloc] init];
+        self.searchBar.delegate = self;
+        self.navigationItem.titleView = self.searchBar;
     }
     return self;
+}
+
+- (void)performSearch:(NSString *)query {
+    [self.client searchWithTerm:query success:^(AFHTTPRequestOperation *operation, id response) {
+        NSLog(@"response: %@", response[@"businesses"]);
+        self.restaurants = [Restaurant restaurantsWithArray:response[@"businesses"]];
+        [self.tableView reloadData];
+    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+        NSLog(@"error: %@", [error description]);
+    }];
+
 }
 
 - (void)viewDidLoad
@@ -52,14 +67,8 @@ NSString * const kYelpTokenSecret = @"YbaDOBV1GRIVnpw-ks3rD_sOhWc";
                                               accessToken:kYelpToken
                                              accessSecret:kYelpTokenSecret];
     
-    [self.client searchWithTerm:@"Thai" success:^(AFHTTPRequestOperation *operation, id response) {
-        NSLog(@"response: %@", response[@"businesses"]);
-        self.restaurants = [Restaurant restaurantsWithArray:response[@"businesses"]];
-        [self.tableView reloadData];
-    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
-        NSLog(@"error: %@", [error description]);
-    }];
-
+    [self performSearch:@"thai"];
+    
 }
 
 - (void)didReceiveMemoryWarning
@@ -68,9 +77,13 @@ NSString * const kYelpTokenSecret = @"YbaDOBV1GRIVnpw-ks3rD_sOhWc";
     // Dispose of any resources that can be recreated.
 }
 
+#pragma mark - UITableViewDataSource methods
+
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
     return self.restaurants.count;
 }
+
+#pragma mark - UITableViewDelegate methods
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     RestaurantCell *restaurantCell = [tableView dequeueReusableCellWithIdentifier:@"RestaurantCell"];
@@ -81,8 +94,13 @@ NSString * const kYelpTokenSecret = @"YbaDOBV1GRIVnpw-ks3rD_sOhWc";
     
 }
 
-- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
-    return 115;
+#pragma mark - UISearchBarDelegate methods
+-(void)searchBarSearchButtonClicked:(UISearchBar *)searchBar {
+    [searchBar endEditing:YES];
+    [self performSearch:[searchBar text]];
+    
 }
+
+
 
 @end
