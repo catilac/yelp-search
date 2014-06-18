@@ -7,6 +7,7 @@
 //
 
 #import "FiltersViewController.h"
+#import "Filter.h"
 
 static int const MIN_CATEGORIES = 3;
 static int const DEALS_SECTION = 2;
@@ -20,6 +21,7 @@ static int const SHOW_ALL_ROW = 3;
 @property (nonatomic, strong) NSMutableDictionary *currentValues;
 @property (nonatomic, strong) NSMutableDictionary *collapsed;
 @property (nonatomic, strong) NSArray *sections;
+@property (nonatomic, strong) Filter *filterSettings;
 
 @end
 
@@ -43,13 +45,13 @@ static int const SHOW_ALL_ROW = 3;
         self.collapsed = [[NSMutableDictionary alloc] initWithObjects:@[@YES, @YES, @YES, @YES] forKeys:self.sections];
         
         self.filterValues = [[NSMutableDictionary alloc] initWithObjects:@[@[@"Best Match", @"Distance", @"Rating"],
-                                                                           @[@"Auto", @"2 Blocks", @"6 Blocks", @"1 mi", @"5 mi"],
+                                                                           @[@"2 Blocks", @"6 Blocks", @"1 mi", @"5 mi"],
                                                                            @[@"Offering a Deal"],
                                                                            @[@"Food", @"Bars", @"Professional Services",
                                                                              @"Automotive", @"Education", @"Doctors"]]
                                                                  forKeys:self.sections];
         
-        self.currentValues = [[NSMutableDictionary alloc] initWithObjects:@[@"Best Match", @"Auto", @"Offering a Deal", @"Food"]
+        self.currentValues = [[NSMutableDictionary alloc] initWithObjects:@[@"Best Match", @"1 mi", @"Offering a Deal", @"Food"]
                                                                   forKeys:self.sections];
         
     }
@@ -61,7 +63,31 @@ static int const SHOW_ALL_ROW = 3;
 }
 
 - (void)didPressSearch {
-    [self.delegate dismissFilterView];
+    self.filterSettings = [[Filter alloc] init];
+    
+    NSString *sortBy = self.currentValues[@"Sort By"];
+    if ([sortBy isEqual:@"Best Match"]) {
+        self.filterSettings.sort = 0;
+    } else if ([sortBy isEqual:@"Distance"]) {
+        self.filterSettings.sort = 1;
+    } else if ([sortBy isEqual:@"Rating"]) {
+        self.filterSettings.sort = 2;
+    }
+    
+    NSString *radius = self.currentValues[@"Radius"];
+    if ([radius isEqual:@"2 Blocks"]) {
+        self.filterSettings.radius = 400;
+    } else if ([radius isEqual:@"6 Blocks"]) {
+        self.filterSettings.radius = 800;
+    } else if ([radius isEqual:@"1 mi"]) {
+        self.filterSettings.radius = 1600;
+    } else if ([radius isEqual:@"5 mi"]) {
+        self.filterSettings.radius = 8000;
+    } else {
+        self.filterSettings.radius = 1600;
+    }
+    
+    [self.delegate dismissFilterViewAndSearch:self.filterSettings];
 }
 
 - (void)viewDidLoad

@@ -7,10 +7,12 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "Filter.h"
 
 @protocol FiltersViewControllerDelegate <NSObject>
 
 - (void)dismissFilterView;
+- (void)dismissFilterViewAndSearch:(Filter *)filter;
 
 @end
 

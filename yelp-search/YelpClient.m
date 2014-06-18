@@ -7,6 +7,7 @@
 //
 
 #import "YelpClient.h"
+#import "Filter.h"
 
 @implementation YelpClient
 
@@ -20,10 +21,18 @@
     return self;
 }
 
-- (AFHTTPRequestOperation *)searchWithTerm:(NSString *)term success:(void (^)(AFHTTPRequestOperation *operation, id response))success failure:(void (^)(AFHTTPRequestOperation *operation, NSError *error))failure {
+- (AFHTTPRequestOperation *)searchWithTerm:(NSString *)term filter:(Filter *)filter success:(void (^)(AFHTTPRequestOperation *operation, id response))success failure:(void (^)(AFHTTPRequestOperation *operation, NSError *error))failure {
     
     // For additional parameters, see http://www.yelp.com/developers/documentation/v2/search_api
-    NSDictionary *parameters = @{@"term": term, @"location" : @"San Francisco"};
+    NSDictionary *parameters;
+    if (filter) {
+        parameters = @{@"term": term,
+                       @"location" : @"Oakland",
+                       @"radius": @(filter.radius),
+                       @"sort": @(filter.sort)};
+    } else {
+        parameters = @{@"term": term, @"location" : @"Oakland"};
+    }
     
     return [self GET:@"search" parameters:parameters success:success failure:failure];
 }

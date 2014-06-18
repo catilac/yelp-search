@@ -11,6 +11,7 @@
 #import "Restaurant.h"
 #import "RestaurantCell.h"
 #import "FiltersViewController.h"
+#import "Filter.h"
 
 NSString * const kYelpConsumerKey = @"dHo-BOth2LTppbddxlXnGw";
 NSString * const kYelpConsumerSecret = @"t_9J-Kgf2NT-JA3tJ3LnU3FGswk";
@@ -24,6 +25,8 @@ NSString * const kYelpTokenSecret = @"YbaDOBV1GRIVnpw-ks3rD_sOhWc";
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
 @property (nonatomic, strong) NSArray *restaurants;
 @property (nonatomic, strong) UISearchBar *searchBar;
+@property (nonatomic, strong) NSString *searchText;
+@property (nonatomic, strong) Filter *filter;
 
 @end
 
@@ -53,8 +56,8 @@ NSString * const kYelpTokenSecret = @"YbaDOBV1GRIVnpw-ks3rD_sOhWc";
     [self presentViewController:nc animated:YES completion:nil];
 }
 
-- (void)performSearch:(NSString *)query {
-    [self.client searchWithTerm:query success:^(AFHTTPRequestOperation *operation, id response) {
+- (void)performSearch:(NSString *)query filter:(Filter *)filter {
+    [self.client searchWithTerm:query filter:filter success:^(AFHTTPRequestOperation *operation, id response) {
         NSLog(@"response: %@", response[@"businesses"]);
         self.restaurants = [Restaurant restaurantsWithArray:response[@"businesses"]];
         [self.tableView reloadData];
@@ -78,8 +81,8 @@ NSString * const kYelpTokenSecret = @"YbaDOBV1GRIVnpw-ks3rD_sOhWc";
                                            consumerSecret:kYelpConsumerSecret
                                               accessToken:kYelpToken
                                              accessSecret:kYelpTokenSecret];
-    
-    [self performSearch:@""];
+    self.searchText = @"thai";
+    [self performSearch:@"thai" filter:nil];
     
 }
 
@@ -109,13 +112,20 @@ NSString * const kYelpTokenSecret = @"YbaDOBV1GRIVnpw-ks3rD_sOhWc";
 
 - (void)searchBarSearchButtonClicked:(UISearchBar *)searchBar {
     [searchBar endEditing:YES];
-    [self performSearch:[searchBar text]];
+    self.searchText = [searchBar text];
+    [self performSearch:self.searchText filter:self.filter];
 }
 
 #pragma mark FiltersViewControllerDelegate methods
 
--(void)dismissFilterView {
+- (void)dismissFilterView {
     [self dismissViewControllerAnimated:YES completion:nil];
+}
+
+- (void)dismissFilterViewAndSearch:(Filter *)filter {
+    [self dismissViewControllerAnimated:YES completion:nil];
+    self.filter = filter;
+    [self performSearch:self.searchText filter:self.filter];
 }
 
 

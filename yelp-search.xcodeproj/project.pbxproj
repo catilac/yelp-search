@@ -21,6 +21,7 @@
 		4615493A194FCB5A00BC2956 /* yelp_searchTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 46154939194FCB5A00BC2956 /* yelp_searchTests.m */; };
 		46154948194FCB9F00BC2956 /* RestaurantsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 46154946194FCB9F00BC2956 /* RestaurantsViewController.m */; };
 		46154949194FCB9F00BC2956 /* RestaurantsViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 46154947194FCB9F00BC2956 /* RestaurantsViewController.xib */; };
+		461B50611951A3CF000C25E9 /* Filter.m in Sources */ = {isa = PBXBuildFile; fileRef = 461B50601951A3CF000C25E9 /* Filter.m */; };
 		4666BA97194FCD3A004F8890 /* YelpClient.m in Sources */ = {isa = PBXBuildFile; fileRef = 4666BA96194FCD3A004F8890 /* YelpClient.m */; };
 		4666BA9C194FD0EE004F8890 /* RestaurantCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 4666BA9A194FD0EE004F8890 /* RestaurantCell.m */; };
 		4666BA9D194FD0EE004F8890 /* RestaurantCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4666BA9B194FD0EE004F8890 /* RestaurantCell.xib */; };
@@ -62,6 +63,8 @@
 		46154945194FCB9F00BC2956 /* RestaurantsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RestaurantsViewController.h; sourceTree = "<group>"; };
 		46154946194FCB9F00BC2956 /* RestaurantsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RestaurantsViewController.m; sourceTree = "<group>"; };
 		46154947194FCB9F00BC2956 /* RestaurantsViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = RestaurantsViewController.xib; sourceTree = "<group>"; };
+		461B505F1951A3CF000C25E9 /* Filter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Filter.h; sourceTree = "<group>"; };
+		461B50601951A3CF000C25E9 /* Filter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Filter.m; sourceTree = "<group>"; };
 		4666BA95194FCD3A004F8890 /* YelpClient.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = YelpClient.h; sourceTree = "<group>"; };
 		4666BA96194FCD3A004F8890 /* YelpClient.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = YelpClient.m; sourceTree = "<group>"; };
 		4666BA99194FD0EE004F8890 /* RestaurantCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RestaurantCell.h; sourceTree = "<group>"; };
@@ -217,6 +220,8 @@
 			children = (
 				4666BAA2194FD413004F8890 /* Restaurant.h */,
 				4666BAA3194FD413004F8890 /* Restaurant.m */,
+				461B505F1951A3CF000C25E9 /* Filter.h */,
+				461B50601951A3CF000C25E9 /* Filter.m */,
 			);
 			name = Models;
 			sourceTree = "<group>";
@@ -361,6 +366,7 @@
 				4666BA97194FCD3A004F8890 /* YelpClient.m in Sources */,
 				46154948194FCB9F00BC2956 /* RestaurantsViewController.m in Sources */,
 				46154925194FCB5A00BC2956 /* AppDelegate.m in Sources */,
+				461B50611951A3CF000C25E9 /* Filter.m in Sources */,
 				46154921194FCB5A00BC2956 /* main.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
