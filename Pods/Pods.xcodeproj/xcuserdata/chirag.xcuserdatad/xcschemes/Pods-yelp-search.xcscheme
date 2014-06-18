@@ -14,7 +14,7 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "C8A0FF3BE73E488C85371ACF"
+               BlueprintIdentifier = "AFBC8E169C764844BB9C0B93"
                BuildableName = "libPods-yelp-search.a"
                BlueprintName = "Pods-yelp-search"
                ReferencedContainer = "container:Pods.xcodeproj">
