@@ -44,12 +44,12 @@ static int const SHOW_ALL_ROW = 3;
         
         self.filterValues = [[NSMutableDictionary alloc] initWithObjects:@[@[@"Best Match", @"Distance", @"Rating"],
                                                                            @[@"Auto", @"2 Blocks", @"6 Blocks", @"1 mi", @"5 mi"],
-                                                                           @[@"ON", @"OFF"],
+                                                                           @[@"Offering a Deal"],
                                                                            @[@"Food", @"Bars", @"Professional Services",
                                                                              @"Automotive", @"Education", @"Doctors"]]
                                                                  forKeys:self.sections];
         
-        self.currentValues = [[NSMutableDictionary alloc] initWithObjects:@[@"Best Match", @"Auto", @"ON", @"Food"]
+        self.currentValues = [[NSMutableDictionary alloc] initWithObjects:@[@"Best Match", @"Auto", @"Offering a Deal", @"Food"]
                                                                   forKeys:self.sections];
         
     }
@@ -87,22 +87,31 @@ static int const SHOW_ALL_ROW = 3;
     NSString *filter = self.sections[indexPath.section];
     
     // Toggle Collapsed
-    Boolean showAllPressed = (indexPath.section == CATEGORIES_SECTION && indexPath.row == SHOW_ALL_ROW);
+    Boolean showAllPressed = (indexPath.section == CATEGORIES_SECTION &&
+                              indexPath.row == SHOW_ALL_ROW &&
+                              [[self.collapsed objectForKey:filter] isEqual:@YES]);
+    Boolean notCategoriesAndNotDeals = (indexPath.section != CATEGORIES_SECTION && indexPath.section != DEALS_SECTION);
     
-    if ((showAllPressed && [[self.collapsed objectForKey:filter] isEqual:@YES]) ||
-        (indexPath.section != CATEGORIES_SECTION && [[self.collapsed objectForKey:filter] isEqual:@YES])) {
-        [self.collapsed setObject:@NO forKey:filter];
-        
-    } else if (indexPath.section != CATEGORIES_SECTION) {
-        [self.collapsed setObject:@YES forKey:filter];
-        // Set new current value
-        NSArray *values = [self.filterValues objectForKey:filter];
-        NSString *selectedValue = values[indexPath.row];
-        [self.currentValues setObject:selectedValue forKey:filter];
+    if (notCategoriesAndNotDeals) {
+        if ([[self.collapsed objectForKey:filter] isEqual:@YES]) {
+            [self.collapsed setObject:@NO forKey:filter];
+        } else {
+            [self.collapsed setObject:@YES forKey:filter];
+            // Set new current value
+            NSArray *values = [self.filterValues objectForKey:filter];
+            NSString *selectedValue = values[indexPath.row];
+            [self.currentValues setObject:selectedValue forKey:filter];
+        }
+
+        [self.tableView reloadSections:[NSIndexSet indexSetWithIndex:indexPath.section]
+                      withRowAnimation:UITableViewRowAnimationAutomatic];
+    } else if (showAllPressed) {
+         [self.collapsed setObject:@NO forKey:filter];
+        [self.tableView reloadSections:[NSIndexSet indexSetWithIndex:indexPath.section]
+                      withRowAnimation:UITableViewRowAnimationAutomatic];
+
     }
     
-    [self.tableView reloadSections:[NSIndexSet indexSetWithIndex:indexPath.section]
-                  withRowAnimation:UITableViewRowAnimationAutomatic];
 }
 
 
@@ -115,8 +124,25 @@ static int const SHOW_ALL_ROW = 3;
         filterCell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault
                                             reuseIdentifier:CellIdentifier];
     }
-
+    
     NSString *filter = self.sections[indexPath.section];
+
+    Boolean showAllButton = (indexPath.section == CATEGORIES_SECTION &&
+                              indexPath.row == SHOW_ALL_ROW &&
+                              [[self.collapsed objectForKey:filter] isEqual:@YES]);
+
+    
+    if (indexPath.section == CATEGORIES_SECTION || indexPath.section == DEALS_SECTION) {
+        // add a UISwitch
+        UISwitch *switchView = [[UISwitch alloc] initWithFrame:CGRectZero];
+        filterCell.accessoryView = switchView;
+    } else {
+        filterCell.accessoryView = nil;
+    }
+    
+    if (showAllButton) {
+        filterCell.accessoryView = nil;
+    }
     
     if ([[self.collapsed objectForKey:filter] isEqual:@YES]) {
         if (indexPath.section == CATEGORIES_SECTION ) {
