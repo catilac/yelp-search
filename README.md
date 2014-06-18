@@ -24,4 +24,4 @@ Features
 
 Walkthrough
 ------------
-![Animated GIF Walkthrough](yelp-search-walkthrough.gif)
+![Animated GIF Walkthrough](yelp-search.gif)
