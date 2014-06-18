@@ -12,7 +12,10 @@
 @interface FiltersViewController ()
 
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
-@property (nonatomic, strong) NSDictionary *filterOptions;
+@property (nonatomic, strong) NSMutableDictionary *filterValues;
+@property (nonatomic, strong) NSMutableDictionary *currentValues;
+@property (nonatomic, strong) NSMutableDictionary *collapsed;
+@property (nonatomic, strong) NSArray *sections;
 
 @end
 
@@ -31,24 +34,18 @@
                                                                                   style:UIBarButtonItemStylePlain
                                                                                  target:self action:@selector(didPressSearch)];
 
-        self.filterOptions = @{
-                               @"Sort By": @{
-                                       @"currValue": @"Best Match",
-                                       @"open": @YES, @"values": @[@"Best Match", @"Distance", @"Rating"]
-                                },
-                               @"Radius": @{
-                                       @"currValue": @"5 mi",
-                                       @"open": @NO, @"values": @[@"2 Blocks", @"6 Blocks", @"1 mi", @"5 mi"]
-                                },
-                               @"Deals": @{
-                                       @"currValue": @"ON",
-                                       @"open": @NO, @"values": @[@"ON", @"OFF"]
-                                },
-                               @"Category": @{
-                                       @"currValue": @"Food",
-                                       @"open": @NO, @"values": @[@"Food", @"Bars", @"Professional Services"]
-                                }
-                               };
+        self.sections = @[@"Sort By", @"Radius", @"Deals", @"Category"];
+
+        self.collapsed = [[NSMutableDictionary alloc] initWithObjects:@[@YES, @YES, @YES, @YES] forKeys:self.sections];
+        
+        self.filterValues = [[NSMutableDictionary alloc] initWithObjects:@[@[@"Best Match", @"Distance", @"Rating"],
+                                                                           @[@"Auto", @"2 Blocks", @"6 Blocks", @"1 mi", @"5 mi"],
+                                                                           @[@"ON", @"OFF"],
+                                                                           @[@"Food", @"Bars", @"Professional Services"]]
+                                                                 forKeys:self.sections];
+        
+        self.currentValues = [[NSMutableDictionary alloc] initWithObjects:@[@"Best Match", @"Auto", @"ON", @"Food"]
+                                                                  forKeys:self.sections];
         
     }
     return self;
@@ -85,7 +82,22 @@
 #pragma mark - UITableViewDelegate methods
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
+    NSString *filter = self.sections[indexPath.section];
     
+    // Toggle Collapsed
+    if ([[self.collapsed objectForKey:filter] isEqual:@YES]) {
+        [self.collapsed setObject:@NO forKey:filter];
+    } else {
+        [self.collapsed setObject:@YES forKey:filter];
+        // Set new current value
+        NSArray *values = [self.filterValues objectForKey:filter];
+        NSString *selectedValue = values[indexPath.row];
+        [self.currentValues setObject:selectedValue forKey:filter];
+    }
+    
+    
+    [self.tableView reloadSections:[NSIndexSet indexSetWithIndex:indexPath.section]
+                  withRowAnimation:UITableViewRowAnimationAutomatic];
 }
 
 
@@ -94,34 +106,35 @@
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     FilterCell *filterCell = [tableView dequeueReusableCellWithIdentifier:@"FilterCell"];
 
-    NSArray *optionKeys = [self.filterOptions allKeys];
-    NSDictionary *optionDict = [self.filterOptions objectForKey:optionKeys[indexPath.section]];
-    NSArray *optionVals = [optionDict objectForKey:@"values"];
+    NSString *filter = self.sections[indexPath.section];
+    if ([[self.collapsed objectForKey:filter] isEqual:@YES]) {
+        filterCell.filterName.text = [self.currentValues objectForKey:filter];
+    } else {
+        NSArray *values = [self.filterValues objectForKey:filter];
+        filterCell.filterName.text = values[indexPath.row];
+    }
     
-    filterCell.filterName.text = optionVals[indexPath.row];
     return filterCell;
 }
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
-    return [[self.filterOptions allKeys] count];
+    return [self.sections count];
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    NSArray *keys = [self.filterOptions allKeys];
-    NSString *key = keys[section];
-    NSDictionary *dict = [self.filterOptions objectForKey:key];
-    NSLog(@"%@", [dict objectForKey:@"open"]);
-    if ([[dict objectForKey:@"open"]  isEqual: @YES]) {
-        NSArray *values = [dict objectForKey:@"values"];
-        return [values count];
-    }
-    return 1;
+    NSString *sectionName = self.sections[section];
     
+    if ([[self.collapsed objectForKey:sectionName] isEqual:@NO]) {
+        // return number of possible values
+        return [[self.filterValues objectForKey:sectionName] count];
+    } else {
+        return 1;
+    }
 }
 
+
 - (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section {
-    NSArray *keys = [self.filterOptions allKeys];
-    return keys[section];
+    return self.sections[section];
 }
 
 @end
