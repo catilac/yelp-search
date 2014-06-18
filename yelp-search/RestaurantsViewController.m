@@ -10,6 +10,7 @@
 #import "YelpClient.h"
 #import "Restaurant.h"
 #import "RestaurantCell.h"
+#import "FiltersViewController.h"
 
 NSString * const kYelpConsumerKey = @"dHo-BOth2LTppbddxlXnGw";
 NSString * const kYelpConsumerSecret = @"t_9J-Kgf2NT-JA3tJ3LnU3FGswk";
@@ -32,12 +33,24 @@ NSString * const kYelpTokenSecret = @"YbaDOBV1GRIVnpw-ks3rD_sOhWc";
 {
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
     if (self) {
-        // Custom initialization
+        // setup search bar & controls
         self.searchBar = [[UISearchBar alloc] init];
         self.searchBar.delegate = self;
         self.navigationItem.titleView = self.searchBar;
+        
+        self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"Filter"
+                                                                                 style:UIBarButtonItemStylePlain
+                                                                                target:self action:@selector(showFilterOptions)];
     }
     return self;
+}
+
+- (void)showFilterOptions {
+    FiltersViewController *filtersVC = [[FiltersViewController alloc] init];
+    filtersVC.delegate = self;
+    UINavigationController *nc = [[UINavigationController alloc] initWithRootViewController:filtersVC];
+    
+    [self presentViewController:nc animated:YES completion:nil];
 }
 
 - (void)performSearch:(NSString *)query {
@@ -95,11 +108,18 @@ NSString * const kYelpTokenSecret = @"YbaDOBV1GRIVnpw-ks3rD_sOhWc";
 }
 
 #pragma mark - UISearchBarDelegate methods
--(void)searchBarSearchButtonClicked:(UISearchBar *)searchBar {
+
+- (void)searchBarSearchButtonClicked:(UISearchBar *)searchBar {
     [searchBar endEditing:YES];
     [self performSearch:[searchBar text]];
-    
 }
+
+#pragma mark FiltersViewControllerDelegate methods
+
+-(void)dismissFilterView {
+    [self dismissViewControllerAnimated:YES completion:nil];
+}
+
 
 
 
