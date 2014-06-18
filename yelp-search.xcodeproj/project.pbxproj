@@ -28,8 +28,6 @@
 		4666BAA4194FD413004F8890 /* Restaurant.m in Sources */ = {isa = PBXBuildFile; fileRef = 4666BAA3194FD413004F8890 /* Restaurant.m */; };
 		4666BAA81951297C004F8890 /* FiltersViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4666BAA61951297C004F8890 /* FiltersViewController.m */; };
 		4666BAA91951297C004F8890 /* FiltersViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4666BAA71951297C004F8890 /* FiltersViewController.xib */; };
-		4666BAAD19514306004F8890 /* FilterCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 4666BAAB19514306004F8890 /* FilterCell.m */; };
-		4666BAAE19514306004F8890 /* FilterCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4666BAAC19514306004F8890 /* FilterCell.xib */; };
 		DDCD2ADEB3EE4003900899E1 /* libPods-yelp-search.a in Frameworks */ = {isa = PBXBuildFile; fileRef = B139723D01BC4FE0A3523D8E /* libPods-yelp-search.a */; };
 /* End PBXBuildFile section */
 
@@ -76,9 +74,6 @@
 		4666BAA51951297C004F8890 /* FiltersViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FiltersViewController.h; sourceTree = "<group>"; };
 		4666BAA61951297C004F8890 /* FiltersViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FiltersViewController.m; sourceTree = "<group>"; };
 		4666BAA71951297C004F8890 /* FiltersViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = FiltersViewController.xib; sourceTree = "<group>"; };
-		4666BAAA19514306004F8890 /* FilterCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FilterCell.h; sourceTree = "<group>"; };
-		4666BAAB19514306004F8890 /* FilterCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FilterCell.m; sourceTree = "<group>"; };
-		4666BAAC19514306004F8890 /* FilterCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = FilterCell.xib; sourceTree = "<group>"; };
 		B139723D01BC4FE0A3523D8E /* libPods-yelp-search.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-yelp-search.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
@@ -213,9 +208,6 @@
 				4666BA99194FD0EE004F8890 /* RestaurantCell.h */,
 				4666BA9A194FD0EE004F8890 /* RestaurantCell.m */,
 				4666BA9B194FD0EE004F8890 /* RestaurantCell.xib */,
-				4666BAAA19514306004F8890 /* FilterCell.h */,
-				4666BAAB19514306004F8890 /* FilterCell.m */,
-				4666BAAC19514306004F8890 /* FilterCell.xib */,
 			);
 			name = Views;
 			sourceTree = "<group>";
@@ -309,7 +301,6 @@
 				4666BA9D194FD0EE004F8890 /* RestaurantCell.xib in Resources */,
 				4615491F194FCB5A00BC2956 /* InfoPlist.strings in Resources */,
 				4666BAA91951297C004F8890 /* FiltersViewController.xib in Resources */,
-				4666BAAE19514306004F8890 /* FilterCell.xib in Resources */,
 				46154927194FCB5A00BC2956 /* Images.xcassets in Resources */,
 				46154949194FCB9F00BC2956 /* RestaurantsViewController.xib in Resources */,
 			);
@@ -364,7 +355,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				4666BA9C194FD0EE004F8890 /* RestaurantCell.m in Sources */,
-				4666BAAD19514306004F8890 /* FilterCell.m in Sources */,
 				4666BAA4194FD413004F8890 /* Restaurant.m in Sources */,
 				4666BAA81951297C004F8890 /* FiltersViewController.m in Sources */,
 				4666BAA0194FD17F004F8890 /* RestaurantImageView.m in Sources */,

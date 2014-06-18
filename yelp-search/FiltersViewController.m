@@ -7,9 +7,9 @@
 //
 
 #import "FiltersViewController.h"
-#import "FilterCell.h"
 
 static int const MIN_CATEGORIES = 3;
+static int const DEALS_SECTION = 2;
 static int const CATEGORIES_SECTION = 3;
 static int const SHOW_ALL_ROW = 3;
 
@@ -70,9 +70,6 @@ static int const SHOW_ALL_ROW = 3;
     // Do any additional setup after loading the view from its nib.
     self.tableView.delegate = self;
     self.tableView.dataSource = self;
-    [self.tableView registerNib:[UINib nibWithNibName:@"FilterCell" bundle:nil]
-         forCellReuseIdentifier:@"FilterCell"];
-
     
     [self.tableView reloadData];
 
@@ -112,25 +109,30 @@ static int const SHOW_ALL_ROW = 3;
 #pragma mark - UITableViewDataSource methods
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-    FilterCell *filterCell = [tableView dequeueReusableCellWithIdentifier:@"FilterCell"];
+    static NSString *CellIdentifier = @"cell";
+    UITableViewCell *filterCell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
+    if (filterCell == nil) {
+        filterCell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault
+                                            reuseIdentifier:CellIdentifier];
+    }
 
     NSString *filter = self.sections[indexPath.section];
     
     if ([[self.collapsed objectForKey:filter] isEqual:@YES]) {
         if (indexPath.section == CATEGORIES_SECTION ) {
             if (indexPath.row == SHOW_ALL_ROW) {
-                filterCell.filterName.text = @"Show All";
+                filterCell.textLabel.text = @"Show All";
             } else {
                 NSArray *values = [self.filterValues objectForKey:filter];
-                filterCell.filterName.text = values[indexPath.row];
+                filterCell.textLabel.text = values[indexPath.row];
             }
         } else {
-            filterCell.filterName.text = [self.currentValues objectForKey:filter];
+            filterCell.textLabel.text = [self.currentValues objectForKey:filter];
         }
         
     } else {
         NSArray *values = [self.filterValues objectForKey:filter];
-        filterCell.filterName.text = values[indexPath.row];
+        filterCell.textLabel.text = values[indexPath.row];
     }
     
     return filterCell;
@@ -147,7 +149,6 @@ static int const SHOW_ALL_ROW = 3;
         // return number of possible values
         return [[self.filterValues objectForKey:sectionName] count];
     } else {
-        // Always show 3 categories
         if ([sectionName isEqual:@"Categories"]) {
             // Show Minimum number of categories plus room for "Show All"
             return MIN_CATEGORIES + 1;
