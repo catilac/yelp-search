@@ -18,8 +18,8 @@ Features
 - [x] Category, sort(best match, distance, highest rated), radius, deals filters
 - [x] The filters table should be organized into sections as in the mock
 - [ ] Use UISwitch for on/off states
-- [ ] Radius filter should expand as in the real Yelp app
-- [ ] Categories should show a subset of all Yelp Categories, and have a "See All" row
+- [x] Radius filter should expand as in the real Yelp app
+- [x] Categories should show a subset of all Yelp Categories, and have a "See All" row
 - [ ] Clicking on the "Search" button should dismiss the filters page and trigger the search w/ the new filter settings
 
 Walkthrough

@@ -9,6 +9,10 @@
 #import "FiltersViewController.h"
 #import "FilterCell.h"
 
+static int const MIN_CATEGORIES = 3;
+static int const CATEGORIES_SECTION = 3;
+static int const SHOW_ALL_ROW = 3;
+
 @interface FiltersViewController ()
 
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
@@ -34,14 +38,15 @@
                                                                                   style:UIBarButtonItemStylePlain
                                                                                  target:self action:@selector(didPressSearch)];
 
-        self.sections = @[@"Sort By", @"Radius", @"Deals", @"Category"];
+        self.sections = @[@"Sort By", @"Radius", @"Deals", @"Categories"];
 
         self.collapsed = [[NSMutableDictionary alloc] initWithObjects:@[@YES, @YES, @YES, @YES] forKeys:self.sections];
         
         self.filterValues = [[NSMutableDictionary alloc] initWithObjects:@[@[@"Best Match", @"Distance", @"Rating"],
                                                                            @[@"Auto", @"2 Blocks", @"6 Blocks", @"1 mi", @"5 mi"],
                                                                            @[@"ON", @"OFF"],
-                                                                           @[@"Food", @"Bars", @"Professional Services"]]
+                                                                           @[@"Food", @"Bars", @"Professional Services",
+                                                                             @"Automotive", @"Education", @"Doctors"]]
                                                                  forKeys:self.sections];
         
         self.currentValues = [[NSMutableDictionary alloc] initWithObjects:@[@"Best Match", @"Auto", @"ON", @"Food"]
@@ -85,16 +90,19 @@
     NSString *filter = self.sections[indexPath.section];
     
     // Toggle Collapsed
-    if ([[self.collapsed objectForKey:filter] isEqual:@YES]) {
+    Boolean showAllPressed = (indexPath.section == CATEGORIES_SECTION && indexPath.row == SHOW_ALL_ROW);
+    
+    if ((showAllPressed && [[self.collapsed objectForKey:filter] isEqual:@YES]) ||
+        (indexPath.section != CATEGORIES_SECTION && [[self.collapsed objectForKey:filter] isEqual:@YES])) {
         [self.collapsed setObject:@NO forKey:filter];
-    } else {
+        
+    } else if (indexPath.section != CATEGORIES_SECTION) {
         [self.collapsed setObject:@YES forKey:filter];
         // Set new current value
         NSArray *values = [self.filterValues objectForKey:filter];
         NSString *selectedValue = values[indexPath.row];
         [self.currentValues setObject:selectedValue forKey:filter];
     }
-    
     
     [self.tableView reloadSections:[NSIndexSet indexSetWithIndex:indexPath.section]
                   withRowAnimation:UITableViewRowAnimationAutomatic];
@@ -107,8 +115,19 @@
     FilterCell *filterCell = [tableView dequeueReusableCellWithIdentifier:@"FilterCell"];
 
     NSString *filter = self.sections[indexPath.section];
+    
     if ([[self.collapsed objectForKey:filter] isEqual:@YES]) {
-        filterCell.filterName.text = [self.currentValues objectForKey:filter];
+        if (indexPath.section == CATEGORIES_SECTION ) {
+            if (indexPath.row == SHOW_ALL_ROW) {
+                filterCell.filterName.text = @"Show All";
+            } else {
+                NSArray *values = [self.filterValues objectForKey:filter];
+                filterCell.filterName.text = values[indexPath.row];
+            }
+        } else {
+            filterCell.filterName.text = [self.currentValues objectForKey:filter];
+        }
+        
     } else {
         NSArray *values = [self.filterValues objectForKey:filter];
         filterCell.filterName.text = values[indexPath.row];
@@ -128,6 +147,12 @@
         // return number of possible values
         return [[self.filterValues objectForKey:sectionName] count];
     } else {
+        // Always show 3 categories
+        if ([sectionName isEqual:@"Categories"]) {
+            // Show Minimum number of categories plus room for "Show All"
+            return MIN_CATEGORIES + 1;
+        }
+
         return 1;
     }
 }
