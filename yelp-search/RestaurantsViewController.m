@@ -68,7 +68,6 @@ NSString * const kYelpTokenSecret = @"YbaDOBV1GRIVnpw-ks3rD_sOhWc";
 {
     [super viewDidLoad];
     // Do any additional setup after loading the view from its nib.
-    self.tableView.delegate = self;
     self.tableView.dataSource = self;
     self.tableView.rowHeight = 115;
 
@@ -80,7 +79,7 @@ NSString * const kYelpTokenSecret = @"YbaDOBV1GRIVnpw-ks3rD_sOhWc";
                                               accessToken:kYelpToken
                                              accessSecret:kYelpTokenSecret];
     
-    [self performSearch:@"thai"];
+    [self performSearch:@""];
     
 }
 
@@ -96,7 +95,6 @@ NSString * const kYelpTokenSecret = @"YbaDOBV1GRIVnpw-ks3rD_sOhWc";
     return self.restaurants.count;
 }
 
-#pragma mark - UITableViewDelegate methods
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     RestaurantCell *restaurantCell = [tableView dequeueReusableCellWithIdentifier:@"RestaurantCell"];
